@@ -1,4 +1,6 @@
 import { Component } from "react";
+import { withRouter } from "react-router";
+import {axiosInstance} from "../axios/axios";
 import {
   Container,
   Row,
@@ -13,6 +15,28 @@ import {
 import "../App.css";
 
 class Login extends Component {
+  state = {
+    username: "",
+    password: "",
+  };
+
+  loginButtonEvent = (event) => {
+    event.preventDefault();
+    this.props.history.push("/home");
+
+  
+  };
+
+  handlePasswordChange = (event) => {
+    this.setState({username: event.target.value})
+
+    
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({password: event.target.value})
+  }
+
   render() {
     return (
       <Container className="login-form">
@@ -26,6 +50,8 @@ class Login extends Component {
                   type="text"
                   name="username"
                   id="username"
+                  value={this.state.password}
+                  onChange={this.handleUsernameChange}
                   placeholder="Username"
                 />
               </FormGroup>
@@ -34,11 +60,13 @@ class Login extends Component {
                 <Input
                   type="password"
                   name="password"
+                  value={this.state.username}
+                  onChange={this.handlePasswordChange}
                   id="examplePassword"
                   placeholder="Password"
                 />
               </FormGroup>
-              <Button>Login</Button>
+              <Button onClick={this.loginButtonEvent}>Login</Button>
             </Form>
           </Col>
         </Row>
@@ -47,4 +75,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

@@ -1,8 +1,23 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
+import Home from "./views/Home";
+import { mount } from 'enzyme';
+import { MemoryRouter } from 'react-router';
+import Login from './views/Login'
+import Router from './Router'
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+describe("unit-test", () => {
+  it("renders the right component with following path '/impressum'", () => {
+      const { getByTestId } = render(
+          <MemoryRouter initialEntries={['/impressum']}>
+              <Login/>
+          </MemoryRouter>
+      )
+
+    
+
+      expect(getByTestId).toBeInTheDocument()
+  })
+})
+
+
