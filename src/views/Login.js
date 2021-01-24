@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { withRouter } from "react-router";
-import {axiosInstance} from "../axios/axios";
+import { axiosInstance } from "../axios/axios";
+import axios from 'axios'
 import {
   Container,
   Row,
@@ -22,20 +23,25 @@ class Login extends Component {
 
   loginButtonEvent = (event) => {
     event.preventDefault();
-    this.props.history.push("/home");
-
-  
+    //this.props.history.push("/home");
+    axios.post('http://localhost:8080/getUser', {
+      username: 'kivancozmen55'
+    })
+    .then(function (response) {
+      localStorage.setItem("username", response.data.username)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   handlePasswordChange = (event) => {
-    this.setState({username: event.target.value})
-
-    
-  }
+    this.setState({ username: event.target.value });
+  };
 
   handleUsernameChange = (event) => {
-    this.setState({password: event.target.value})
-  }
+    this.setState({ password: event.target.value });
+  };
 
   render() {
     return (
