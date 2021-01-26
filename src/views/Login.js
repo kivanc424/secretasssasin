@@ -1,7 +1,6 @@
 import { Component } from "react";
-import { withRouter } from "react-router";
-import { axiosInstance } from "../axios/axios";
-import axios from 'axios'
+import { withRouter } from 'react-router-dom';
+import axios from "axios";
 import {
   Container,
   Row,
@@ -23,23 +22,28 @@ class Login extends Component {
 
   loginButtonEvent = (event) => {
     event.preventDefault();
-    //this.props.history.push("/home");
-    axios.post('http://localhost:8080/getUser', {
-      username: 'kivancozmen55'
-    })
-    .then(function (response) {
-      localStorage.setItem("username", response.data.username)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  };
-
-  handlePasswordChange = (event) => {
-    this.setState({ username: event.target.value });
+    let that = this;
+    axios
+      .post("http://localhost:8080/login", {
+        username: this.state.username,
+        password: this.state.password,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("username", response.data.username);
+        that.props.history.push("/home")
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   handleUsernameChange = (event) => {
+    this.setState({ username: event.target.value });
+  };
+
+  handlePasswordChange = (event) => {
     this.setState({ password: event.target.value });
   };
 
@@ -56,7 +60,7 @@ class Login extends Component {
                   type="text"
                   name="username"
                   id="username"
-                  value={this.state.password}
+                  value={this.state.username}
                   onChange={this.handleUsernameChange}
                   placeholder="Username"
                 />
@@ -66,7 +70,7 @@ class Login extends Component {
                 <Input
                   type="password"
                   name="password"
-                  value={this.state.username}
+                  value={this.state.password}
                   onChange={this.handlePasswordChange}
                   id="examplePassword"
                   placeholder="Password"
