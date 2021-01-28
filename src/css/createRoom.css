@@ -1,0 +1,11 @@
+.form-container {
+    flex-direction: column;
+    align-self: center;
+    width: 300px;
+}
+
+.container {
+    max-width: 400px;
+    margin-top: 17%;
+    display: flex;
+}
