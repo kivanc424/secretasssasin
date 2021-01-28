@@ -2,13 +2,43 @@ import { Component, React } from "react";
 import { Form, Button } from "react-bootstrap";
 import { options } from "../data/data";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
 
 import "../css/createRoom.css";
 
 class CreateRoomView extends Component {
+  state = {
+    totalPlayers: 5,
+    roomName: "",
+    roomPassword: "",
+    percival: false,
+    merlin: false,
+    morgana: false,
+    oberon: false,
+    mordred: false,
+  };
   createRoomButton = (event) => {
     event.preventDefault();
-    this.props.history.push("/all-game-room");
+    let that = this;
+
+    axios
+      .post("http://localhost:8080/create-room", {
+        roomName: this.state.roomName,
+        roomPassword: this.state.roomPassword,
+        totalPlayers: this.state.totalPlayers,
+        percival: this.state.percival,
+        merlin: this.state.merlin,
+        morgana: this.state.morgana,
+        oberon: this.state.oberon,
+        mordred: this.state.mordred,
+      })
+      .then((response) => {
+        that.props.history.push("/all-game-room");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {
@@ -17,27 +47,103 @@ class CreateRoomView extends Component {
         <Form className="form-container">
           <Form.Group>
             <Form.Label>Room Name</Form.Label>
-            <Form.Control type="text" placeholder="Name of Room" />
+            <Form.Control
+              type="text"
+              placeholder="Name of Room"
+              value={this.state.roomName}
+              onChange={(event) => {
+                this.setState({ roomName: event.target.value });
+              }}
+            />
           </Form.Group>
           <Form.Group>
             <Form.Label>Room Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" />
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={this.state.roomPassword}
+              onChange={(event) => {
+                this.setState({ roomPassword: event.target.value });
+              }}
+            />
           </Form.Group>
           <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Percival" />
-            <Form.Check type="checkbox" label="Merlin" />
-            <Form.Check type="checkbox" label="Morgana" />
-            <Form.Check type="checkbox" label="Oberon" />
-            <Form.Check type="checkbox" label="Mordred" />
+            <Form.Check
+              type="checkbox"
+              label="Percival"
+              checked={this.state.percival}
+              onChange={(event) => {
+                const target = event.target;
+                this.setState({
+                  percival:
+                    target.type === "checkbox" ? target.checked : target.value,
+                });
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Merlin"
+              checked={this.state.merlin}
+              onChange={(event) => {
+                const target = event.target;
+                this.setState({
+                  merlin:
+                    target.type === "checkbox" ? target.checked : target.value,
+                });
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Morgana"
+              checked={this.state.morgana}
+              onChange={(event) => {
+                const target = event.target;
+                this.setState({
+                  morgana:
+                    target.type === "checkbox" ? target.checked : target.value,
+                });
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Oberon"
+              checked={this.state.oberon}
+              onChange={(event) => {
+                const target = event.target;
+                this.setState({
+                  oberon:
+                    target.type === "checkbox" ? target.checked : target.value,
+                });
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label="Mordred"
+              checked={this.state.mordred}
+              onChange={(event) => {
+                const target = event.target;
+                this.setState({
+                  mordred:
+                    target.type === "checkbox" ? target.checked : target.value,
+                });
+              }}
+            />
           </Form.Group>
           <Form.Group>
-            <Form.Control size="sm" as="select">
+            <Form.Control
+              size="sm"
+              as="select"
+              value={this.state.totalPlayers}
+              onChange={(event) => {
+                this.setState({ totalPlayers: parseInt(event.target.value) });
+              }}
+            >
               {options.map((option) => {
                 return <option value={option.value}>{option.label}</option>;
               })}
             </Form.Control>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" onClick={this.createRoomButton}>
             Create Room
           </Button>
         </Form>

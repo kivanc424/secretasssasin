@@ -1,5 +1,6 @@
 import { Component, React } from "react";
 import { Card, Button, Navbar, Nav } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 class GameNavBar extends Component {
   render() {
     return (
@@ -9,8 +10,12 @@ class GameNavBar extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Rooms</Nav.Link>
+              <LinkContainer to="/home">
+                <Nav.Link>Home</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/all-game-room">
+                <Nav.Link>Rooms</Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
