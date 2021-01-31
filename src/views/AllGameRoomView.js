@@ -2,6 +2,8 @@ import { Component, React } from "react";
 import GameRoomTable from "../components/GameRoomTable";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
 const products = [
   { id: 1, name: "Item 1", price: 100 },
@@ -40,13 +42,20 @@ class AllGameRoomView extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8080/getrooms")
+      .get("http://localhost:8080/get-all-rooms")
       .then((response) => {
-        this.setState({rooms: response.data})
+        this.setState({ rooms: response.data });
       })
       .catch((error) => {
         console.log(error);
       });
+
+    var socket = new SockJS("http://localhost:8080/secret-assassin");
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, (frame) => {
+
+    });
   }
 
   onFollowChanged() {
@@ -66,7 +75,9 @@ class AllGameRoomView extends Component {
     );
   };
   render() {
-    return <GameRoomTable columns={this.state.columns} products={this.state.rooms} />;
+    return (
+      <GameRoomTable columns={this.state.columns} products={this.state.rooms} />
+    );
   }
 }
 
