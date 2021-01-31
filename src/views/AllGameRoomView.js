@@ -5,10 +5,8 @@ import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const products = [
-  { id: 1, name: "Item 1", price: 100 },
-  { id: 2, name: "Item 2", price: 102 },
-];
+var socket = new SockJS("http://localhost:8080/secret-assassin");
+var stompClient = Stomp.over(socket);
 
 class AllGameRoomView extends Component {
   constructor() {
@@ -41,20 +39,22 @@ class AllGameRoomView extends Component {
   }
 
   componentDidMount() {
+    let that = this;
+
     axios
       .get("http://localhost:8080/get-all-rooms")
       .then((response) => {
-        this.setState({ rooms: response.data });
+        that.setState({ rooms: response.data });
       })
       .catch((error) => {
         console.log(error);
       });
 
-    var socket = new SockJS("http://localhost:8080/secret-assassin");
-    var stompClient = Stomp.over(socket);
-
     stompClient.connect({}, (frame) => {
-
+      stompClient.subscribe("/rooms/room-lists", (response) => {
+        const data = JSON.parse(response.body)
+        that.setState({rooms: that.state.rooms.concat([data])})
+      });
     });
   }
 

@@ -2,9 +2,13 @@ import { Component, React } from "react";
 import { Form, Button } from "react-bootstrap";
 import { options } from "../data/data";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
 import "../css/createRoom.css";
+
+var socket = new SockJS("http://localhost:8080/secret-assassin");
+var stompClient = Stomp.over(socket);
 
 class CreateRoomView extends Component {
   state = {
@@ -17,28 +21,31 @@ class CreateRoomView extends Component {
     oberon: false,
     mordred: false,
   };
+
+  componentDidMount() {
+    stompClient.connect({}, (frame) => {
+      
+    });
+  }
+
   createRoomButton = (event) => {
     event.preventDefault();
     let that = this;
 
-    axios
-      .post("http://localhost:8080/create-room", {
-        roomName: this.state.roomName,
-        roomPassword: this.state.roomPassword,
-        totalPlayers: this.state.totalPlayers,
-        percival: this.state.percival,
-        merlin: this.state.merlin,
-        morgana: this.state.morgana,
-        oberon: this.state.oberon,
-        mordred: this.state.mordred,
-      })
-      .then((response) => {
-        that.props.history.push("/all-game-room");
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    let ob = JSON.stringify({
+      roomName: this.state.roomName,
+      roomPassword: this.state.roomPassword,
+      totalPlayers: this.state.totalPlayers,
+      percival: this.state.percival,
+      merlin: this.state.merlin,
+      morgana: this.state.morgana,
+      oberon: this.state.oberon,
+      mordred: this.state.mordred,
+    });
+
+
+    stompClient.send("/app/creategame-room", {}, ob);
   };
 
   render() {
