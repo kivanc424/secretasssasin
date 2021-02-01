@@ -7,8 +7,8 @@ import Stomp from "stompjs";
 
 import "../css/createRoom.css";
 
-var socket = new SockJS("http://localhost:8080/secret-assassin");
-var stompClient = Stomp.over(socket);
+var socket;
+var stompClient;
 
 class CreateRoomView extends Component {
   state = {
@@ -23,15 +23,20 @@ class CreateRoomView extends Component {
   };
 
   componentDidMount() {
-    stompClient.connect({}, (frame) => {
-      
+    socket = new SockJS("http://localhost:8080/secret-assassin");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {});
+  }
+
+  componentWillUnmount() {
+    stompClient.disconnect((res) => {
+      console.log("Client disconnected from create room");
     });
   }
 
   createRoomButton = (event) => {
     event.preventDefault();
     let that = this;
-
 
     let ob = JSON.stringify({
       roomName: this.state.roomName,
@@ -44,8 +49,9 @@ class CreateRoomView extends Component {
       mordred: this.state.mordred,
     });
 
-
     stompClient.send("/app/creategame-room", {}, ob);
+
+    that.props.history.push("/all-game-room");
   };
 
   render() {

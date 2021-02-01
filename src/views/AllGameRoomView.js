@@ -4,9 +4,10 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { withRouter } from "react-router-dom";
 
-var socket = new SockJS("http://localhost:8080/secret-assassin");
-var stompClient = Stomp.over(socket);
+var socket;
+var stompClient;
 
 class AllGameRoomView extends Component {
   constructor() {
@@ -41,6 +42,9 @@ class AllGameRoomView extends Component {
   componentDidMount() {
     let that = this;
 
+    socket = new SockJS("http://localhost:8080/secret-assassin");
+    stompClient = Stomp.over(socket);
+
     axios
       .get("http://localhost:8080/get-all-rooms")
       .then((response) => {
@@ -52,9 +56,15 @@ class AllGameRoomView extends Component {
 
     stompClient.connect({}, (frame) => {
       stompClient.subscribe("/rooms/room-lists", (response) => {
-        const data = JSON.parse(response.body)
-        that.setState({rooms: that.state.rooms.concat([data])})
+        const data = JSON.parse(response.body);
+        that.setState({ rooms: that.state.rooms.concat([data]) });
       });
+    });
+  }
+
+  componentWillUnmount() {
+    stompClient.disconnect((res) => {
+      console.log("Client has disconnect from socket");
     });
   }
 
@@ -67,7 +77,8 @@ class AllGameRoomView extends Component {
     return (
       <Button
         onClick={() => {
-          this.onFollowChanged(row);
+          console.log(row);
+          this.props.history.push("/lobby")
         }}
       >
         Join Room
@@ -81,4 +92,4 @@ class AllGameRoomView extends Component {
   }
 }
 
-export default AllGameRoomView;
+export default withRouter(AllGameRoomView);
