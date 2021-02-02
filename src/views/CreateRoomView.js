@@ -38,6 +38,11 @@ class CreateRoomView extends Component {
     event.preventDefault();
     let that = this;
 
+    let roomMaster = {
+      "id": "kakaka",
+      "username": localStorage.getItem("username")
+    }
+
     let ob = JSON.stringify({
       roomName: this.state.roomName,
       roomPassword: this.state.roomPassword,
@@ -47,6 +52,7 @@ class CreateRoomView extends Component {
       morgana: this.state.morgana,
       oberon: this.state.oberon,
       mordred: this.state.mordred,
+      players: [roomMaster]
     });
 
     stompClient.send("/app/creategame-room", {}, ob);
