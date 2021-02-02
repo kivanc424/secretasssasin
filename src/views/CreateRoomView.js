@@ -4,6 +4,7 @@ import { options } from "../data/data";
 import { withRouter } from "react-router-dom";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import CreateGameForm from "../components/CreateGameForm";
 
 import "../css/createRoom.css";
 
@@ -39,9 +40,9 @@ class CreateRoomView extends Component {
     let that = this;
 
     let roomMaster = {
-      "id": "kakaka",
-      "username": localStorage.getItem("username")
-    }
+      id: "kakaka",
+      username: localStorage.getItem("username"),
+    };
 
     let ob = JSON.stringify({
       roomName: this.state.roomName,
@@ -52,7 +53,7 @@ class CreateRoomView extends Component {
       morgana: this.state.morgana,
       oberon: this.state.oberon,
       mordred: this.state.mordred,
-      players: [roomMaster]
+      players: [roomMaster],
     });
 
     stompClient.send("/app/creategame-room", {}, ob);
@@ -63,109 +64,61 @@ class CreateRoomView extends Component {
   render() {
     return (
       <div className="container">
-        <Form className="form-container">
-          <Form.Group>
-            <Form.Label>Room Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Name of Room"
-              value={this.state.roomName}
-              onChange={(event) => {
-                this.setState({ roomName: event.target.value });
-              }}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Room Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={this.state.roomPassword}
-              onChange={(event) => {
-                this.setState({ roomPassword: event.target.value });
-              }}
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check
-              type="checkbox"
-              label="Percival"
-              checked={this.state.percival}
-              onChange={(event) => {
-                const target = event.target;
-                this.setState({
-                  percival:
-                    target.type === "checkbox" ? target.checked : target.value,
-                });
-              }}
-            />
-            <Form.Check
-              type="checkbox"
-              label="Merlin"
-              checked={this.state.merlin}
-              onChange={(event) => {
-                const target = event.target;
-                this.setState({
-                  merlin:
-                    target.type === "checkbox" ? target.checked : target.value,
-                });
-              }}
-            />
-            <Form.Check
-              type="checkbox"
-              label="Morgana"
-              checked={this.state.morgana}
-              onChange={(event) => {
-                const target = event.target;
-                this.setState({
-                  morgana:
-                    target.type === "checkbox" ? target.checked : target.value,
-                });
-              }}
-            />
-            <Form.Check
-              type="checkbox"
-              label="Oberon"
-              checked={this.state.oberon}
-              onChange={(event) => {
-                const target = event.target;
-                this.setState({
-                  oberon:
-                    target.type === "checkbox" ? target.checked : target.value,
-                });
-              }}
-            />
-            <Form.Check
-              type="checkbox"
-              label="Mordred"
-              checked={this.state.mordred}
-              onChange={(event) => {
-                const target = event.target;
-                this.setState({
-                  mordred:
-                    target.type === "checkbox" ? target.checked : target.value,
-                });
-              }}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Control
-              size="sm"
-              as="select"
-              value={this.state.totalPlayers}
-              onChange={(event) => {
-                this.setState({ totalPlayers: parseInt(event.target.value) });
-              }}
-            >
-              {options.map((option) => {
-                return <option value={option.value}>{option.label}</option>;
-              })}
-            </Form.Control>
-          </Form.Group>
-          <Button variant="primary" onClick={this.createRoomButton}>
-            Create Room
-          </Button>
-        </Form>
+        <CreateGameForm
+          roomName={this.state.roomName}
+          password={this.state.roomPassword}
+          percival={this.state.percival}
+          morgana={this.state.morgana}
+          oberon={this.state.oberon}
+          mordred={this.state.mordred}
+          totalPlayers={this.state.totalPlayers}
+          options={options}
+          createRoomButton={this.createRoomButton}
+          totalPlayersChange={(event) => {
+            this.setState({ totalPlayers: parseInt(event.target.value) });
+          }}
+          mordredCheckChange={(event) => {
+            const target = event.target;
+            this.setState({
+              mordred:
+                target.type === "checkbox" ? target.checked : target.value,
+            });
+          }}
+          oberonCheckChange={(event) => {
+            const target = event.target;
+            this.setState({
+              oberon:
+                target.type === "checkbox" ? target.checked : target.value,
+            });
+          }}
+          morganaCheckChange={(event) => {
+            const target = event.target;
+            this.setState({
+              morgana:
+                target.type === "checkbox" ? target.checked : target.value,
+            });
+          }}
+          merlinCheckChange={(event) => {
+            const target = event.target;
+            this.setState({
+              merlin:
+                target.type === "checkbox" ? target.checked : target.value,
+            });
+          }}
+          percivalCheckChange={(event) => {
+            const target = event.target;
+            this.setState({
+              percival:
+                target.type === "checkbox" ? target.checked : target.value,
+            });
+          }}
+          roomPasswordChange={(event) => {
+            this.setState({ roomPassword: event.target.value });
+          }}
+          roomNameChange={(event) => {
+            this.setState({ roomName: event.target.value });
+          }}
+        />
       </div>
     );
   }
