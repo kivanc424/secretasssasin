@@ -1,0 +1,29 @@
+
+.lobby__container {
+    width: 100%;
+    height: 800px;
+    
+}
+
+.lobby__contents {
+    height: 80%;
+    padding-top: 80px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.lobby__player__table {
+    width: 40%;
+    
+}
+
+.lobby__player__chat {
+    width: 40%;
+    
+}
+
+.lobby__options__container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}

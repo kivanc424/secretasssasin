@@ -24,3 +24,16 @@ export const options = [
     value: 10,
   },
 ];
+
+export const mockUpData = [
+  {
+    id: "aafafaf",
+    player: "Kivanc",
+    status: "ready"
+  },
+  {
+    id: "afkkkcc",
+    player: "özmen",
+    status: "not ready"
+  }
+]

@@ -12,7 +12,7 @@ import {
   Input,
 } from "reactstrap";
 
-import "../App.css";
+
 
 class Login extends Component {
   state = {
