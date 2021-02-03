@@ -31,6 +31,8 @@ class Login extends Component {
       .then(function (response) {
         console.log(response.data);
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("id", response.data.id)
+        console.log(response.data.id)
         localStorage.setItem("username", response.data.username);
         that.props.history.push("/home")
       })

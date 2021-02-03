@@ -78,7 +78,7 @@ class AllGameRoomView extends Component {
       <Button
         onClick={() => {
           console.log(row);
-          this.props.history.push("/lobby");
+          this.props.history.push(`/lobby/${row.id}`);
         }}
       >
         Join Room

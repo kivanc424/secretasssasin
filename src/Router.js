@@ -14,7 +14,7 @@ export default function Router() {
         <Route path="/login" component={Login} />
         <Route path="/create-room" component={CreateRoomView} />
         <Route path="/all-game-room" component={AllGameRoomView} />
-        <Route path="/lobby" component={GameLobby} />
+        <Route path="/lobby/:id" component={GameLobby} />
       </Switch>
     </BrowserRouter>
   );

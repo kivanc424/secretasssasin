@@ -1,11 +1,18 @@
-.form-container {
-    flex-direction: column;
-    align-self: center;
-    width: 300px;
+.game__container {
+    width: 100%;
+    height: 800px;
+    display: flex;
+    margin-top: 50px;
+    justify-content: space-evenly;
 }
 
-.container {
-    max-width: 400px;
-    margin-top: 17%;
-    display: flex;
+.game__create__lobby {
+    width: 40%;
+    height: 80%;
+}
+
+.game__lobby__players{
+    width: 40%;
+    height: 80%;
+
 }

@@ -27,12 +27,12 @@ export const options = [
 
 export const mockUpData = [
   {
-    id: "aafafaf",
+    _id: "aafafaf",
     player: "Kivanc",
     status: "ready"
   },
   {
-    id: "afkkkcc",
+    _id: "afkkkcc",
     player: "özmen",
     status: "not ready"
   }

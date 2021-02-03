@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 function CreateGameForm(props) {
   return (
     <div>
-      <Form className="form-container">
+      <Form>
         <Form.Group>
           <Form.Label>Room Name</Form.Label>
           <Form.Control
