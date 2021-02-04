@@ -30,6 +30,7 @@ class GameLobby extends Component {
       username: "",
       lobby: "",
       players: [],
+      lobbyButtonState: false,
     };
   }
 
@@ -43,6 +44,11 @@ class GameLobby extends Component {
       stompClient.subscribe("/rooms/join-lobby", (response) => {
         const data = JSON.parse(response.body);
         that.setState({ players: that.state.players.concat([data]) });
+      });
+
+      stompClient.subscribe("/rooms/leave-lobby", (response) => {
+        const data = JSON.parse(response.body);
+        this.setState({players: that.state.players.filter(player => !player.id.includes(data.id))})
       });
     });
     axios
@@ -64,6 +70,18 @@ class GameLobby extends Component {
       username: localStorage.getItem("username"),
     });
     stompClient.send("/app/lobby", {}, ob);
+    this.setState({ lobbyButtonState: true });
+  };
+
+  leaveLobbyButton = () => {
+    this.setState({ lobbyButtonState: false });
+    let ob = JSON.stringify({
+      lobbyId: this.props.match.params.id,
+      id: localStorage.getItem("id"),
+      username: localStorage.getItem("username"),
+    });
+
+    stompClient.send("/app/leave-lobby", {}, ob);
   };
 
   render() {
@@ -77,7 +95,11 @@ class GameLobby extends Component {
               <div className="lobby__player__table">
                 <div className="lobby__options__container">
                   <h1 className="h2">Lobby</h1>
-                  <Button onClick={this.joinLobbyButton}>Leave Lobby</Button>
+                  {this.state.lobbyButtonState === false ? (
+                    <Button onClick={this.joinLobbyButton}>Join Lobby</Button>
+                  ) : (
+                    <Button onClick={this.leaveLobbyButton}>Leave Lobby</Button>
+                  )}
                 </div>
                 <BootstrapTable
                   keyField="id"
