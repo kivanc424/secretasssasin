@@ -5,6 +5,7 @@ import Home from "./views/Home";
 import AllGameRoomView from "./views/AllGameRoomView";
 import CreateRoomView from "./views/CreateRoomView";
 import GameLobby from "./views/GameLobby";
+import ExampleLogin from "./views/ExampleLogin";
 
 export default function Router() {
   return (
@@ -14,6 +15,7 @@ export default function Router() {
         <Route path="/login" component={Login} />
         <Route path="/create-room" component={CreateRoomView} />
         <Route path="/all-game-room" component={AllGameRoomView} />
+        <Route path="/design" component={ExampleLogin}/>
         <Route path="/lobby/:id" component={GameLobby} />
       </Switch>
     </BrowserRouter>
