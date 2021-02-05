@@ -48,12 +48,17 @@ class GameLobby extends Component {
 
       stompClient.subscribe("/rooms/leave-lobby", (response) => {
         const data = JSON.parse(response.body);
-        this.setState({players: that.state.players.filter(player => !player.id.includes(data.id))})
+        this.setState({
+          players: that.state.players.filter(
+            (player) => !player.id.includes(data.id)
+          ),
+        });
       });
     });
     axios
       .post("http://localhost:8080/get-lobby", {
-        id: that.props.match.params.id,
+        lobbyId: that.props.match.params.id,
+        id: localStorage.getItem("id"),
       })
       .then((res) => {
         this.setState({

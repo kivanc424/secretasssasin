@@ -38,6 +38,7 @@ class CreateRoomView extends Component {
           {
             id: localStorage.getItem("id"),
             username: localStorage.getItem("username"),
+            gameMaster: true,
           },
         ],
       })
