@@ -31,6 +31,7 @@ class GameLobby extends Component {
       lobby: "",
       players: [],
       lobbyButtonState: false,
+      player: "",
     };
   }
 
@@ -56,27 +57,27 @@ class GameLobby extends Component {
       });
     });
     axios
-      .post("http://localhost:8080/get-lobby", {
-        lobbyId: that.props.match.params.id,
-        id: localStorage.getItem("id"),
-      })
+      .get(`http://localhost:8080/get-lobby/${this.props.match.params.id}`)
       .then((res) => {
         this.setState({
           lobby: res.data,
           players: res.data.players,
         });
       });
-  }
 
-  joinLobbyButton = () => {
-    let ob = JSON.stringify({
-      lobbyId: this.props.match.params.id,
-      id: localStorage.getItem("id"),
-      username: localStorage.getItem("username"),
-    });
-    stompClient.send("/app/lobby", {}, ob);
-    this.setState({ lobbyButtonState: true });
-  };
+    axios
+      .get(
+        `http://localhost:8080/get-player-information/${
+          this.props.match.params.id
+        }/${localStorage.getItem("id")}`
+      )
+      .then((res) => {
+        this.setState({ player: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   leaveLobbyButton = () => {
     this.setState({ lobbyButtonState: false });
@@ -87,7 +88,13 @@ class GameLobby extends Component {
     });
 
     stompClient.send("/app/leave-lobby", {}, ob);
+
+    this.props.history.push("/");
   };
+
+  componentWillUnmount() {
+    stompClient.disconnect();
+  }
 
   render() {
     return (
@@ -100,12 +107,21 @@ class GameLobby extends Component {
               <div className="lobby__player__table">
                 <div className="lobby__options__container">
                   <h1 className="h2">Lobby</h1>
-                  {this.state.lobbyButtonState === false ? (
-                    <Button onClick={this.joinLobbyButton}>Join Lobby</Button>
+                  {this.state.player.gameMaster ? (
+                    <div>
+                      <Button>Start Game</Button>
+                      <Button>Destroy Lobby</Button>
+                    </div>
                   ) : (
-                    <Button onClick={this.leaveLobbyButton}>Leave Lobby</Button>
+                    <div>
+                      <Button>Ready</Button>
+                      <Button onClick={this.leaveLobbyButton}>
+                        LeaveLobby
+                      </Button>
+                    </div>
                   )}
                 </div>
+
                 <BootstrapTable
                   keyField="id"
                   data={this.state.players}

@@ -54,18 +54,7 @@ class AllGameRoomView extends Component {
         console.log(error);
       });
 
-    stompClient.connect({}, (frame) => {
-      stompClient.subscribe("/rooms/room-lists", (response) => {
-        const data = JSON.parse(response.body);
-        that.setState({ rooms: that.state.rooms.concat([data]) });
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    stompClient.disconnect((res) => {
-      console.log("Client has disconnect from socket");
-    });
+    stompClient.connect({}, (frame) => {});
   }
 
   onFollowChanged() {
@@ -78,6 +67,15 @@ class AllGameRoomView extends Component {
       <Button
         onClick={() => {
           console.log(row);
+
+          let ob = JSON.stringify({
+            lobbyId: row.id,
+            id: localStorage.getItem("id"),
+            username: localStorage.getItem("username"),
+            gameMaster: false,
+            readyState: "not ready"
+          });
+          stompClient.send("/app/lobby", {}, ob);
           this.props.history.push(`/lobby/${row.id}`);
         }}
       >
