@@ -24,6 +24,12 @@ class GameLobby extends Component {
           text: "Players",
           sort: true,
         },
+
+        {
+          dataField: "readyState",
+          text: "Ready Status",
+          sort: true,
+        },
       ],
 
       lobbyState: false,
@@ -55,6 +61,15 @@ class GameLobby extends Component {
           ),
         });
       });
+
+      stompClient.subscribe("/rooms/player-ready", (response) => {
+        const data = JSON.parse(response.body);
+        this.setState({
+          players: that.state.players.filter(player => {
+            
+          })
+        })
+      });
     });
     axios
       .get(`http://localhost:8080/get-lobby/${this.props.match.params.id}`)
@@ -79,6 +94,10 @@ class GameLobby extends Component {
       });
   }
 
+  componentWillUnmount() {
+    stompClient.disconnect();
+  }
+
   leaveLobbyButton = () => {
     this.setState({ lobbyButtonState: false });
     let ob = JSON.stringify({
@@ -89,12 +108,18 @@ class GameLobby extends Component {
 
     stompClient.send("/app/leave-lobby", {}, ob);
 
-    this.props.history.push("/");
+    this.props.history.push("/all-game-room");
   };
 
-  componentWillUnmount() {
-    stompClient.disconnect();
-  }
+  buttonClickReady = () => {
+    let message = JSON.stringify({
+      lobbyId: this.props.match.params.id,
+      id: localStorage.getItem("id"),
+      username: localStorage.getItem("username"),
+      readyState: "ready",
+    });
+    stompClient.send("/app/ready", {}, message);
+  };
 
   render() {
     return (
@@ -114,7 +139,7 @@ class GameLobby extends Component {
                     </div>
                   ) : (
                     <div>
-                      <Button>Ready</Button>
+                      <Button onClick={this.buttonClickReady}>Ready</Button>
                       <Button onClick={this.leaveLobbyButton}>
                         LeaveLobby
                       </Button>
