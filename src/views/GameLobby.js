@@ -65,10 +65,8 @@ class GameLobby extends Component {
       stompClient.subscribe("/rooms/player-ready", (response) => {
         const data = JSON.parse(response.body);
         this.setState({
-          players: that.state.players.filter(player => {
-            
-          })
-        })
+          players: data.players,
+        });
       });
     });
     axios
