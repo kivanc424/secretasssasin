@@ -8,6 +8,7 @@ import Stomp from "stompjs";
 
 import "../css/lobby.css";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import GameLobbyComponent from "../components/GameLobbyComponent";
 
 var socket;
 var stompClient;
@@ -38,7 +39,7 @@ class GameLobby extends Component {
       lobbyButtonState: false,
       player: "",
       ready: false,
-      gameStatus: true
+      gameStatus: true,
     };
   }
 
@@ -78,8 +79,8 @@ class GameLobby extends Component {
       });
 
       stompClient.subscribe("/rooms/destroy-lobby", (response) => {
-        that.props.history.push("/")
-      })
+        that.props.history.push("/");
+      });
     });
 
     axios
@@ -152,54 +153,25 @@ class GameLobby extends Component {
   destroyLobbyButton = () => {
     let message = JSON.stringify({
       lobbyId: this.props.match.params.id,
-      gameStatus: true
-    })
+      gameStatus: true,
+    });
 
-    stompClient.send("/app/destroy-lobby", {}, message)
+    stompClient.send("/app/destroy-lobby", {}, message);
   };
 
   render() {
     return (
-      <div>
-        {this.state.lobbyState === true ? (
-          <h1>Hello</h1>
-        ) : (
-          <div className="lobby__container">
-            <div className="lobby__contents">
-              <div className="lobby__player__table">
-                <div className="lobby__options__container">
-                  <h1 className="h2">Lobby</h1>
-                  {this.state.player.gameMaster ? (
-                    <div>
-                      <Button>Start Game</Button>
-                      <Button onClick={this.destroyLobbyButton}>Destroy Lobby</Button>
-                    </div>
-                  ) : (
-                    <div>
-                      {this.state.ready ? (
-                        <Button onClick={this.buttonClickNotReady}>
-                          Not Ready
-                        </Button>
-                      ) : (
-                        <Button onClick={this.buttonClickReady}>Ready</Button>
-                      )}
-                      <Button onClick={this.leaveLobbyButton}>
-                        LeaveLobby
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                <BootstrapTable
-                  keyField="id"
-                  data={this.state.players}
-                  columns={this.state.columns}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <GameLobbyComponent
+        lobbyState={this.state.lobbyButtonState}
+        gameMaster={this.state.player.gameMaster}
+        destroyLobbyButton={this.destroyLobbyButton}
+        ready={this.state.ready}
+        buttonClickNotReady={this.buttonClickNotReady}
+        buttonClickReady={this.buttonClickReady}
+        leaveLobbyButton={this.leaveLobbyButton}
+        playersData={this.state.players}
+        columnData={this.state.columns}
+      />
     );
   }
 }
