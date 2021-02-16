@@ -1,6 +1,5 @@
 import { Component, React } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mockUpData } from "../data/data";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
@@ -38,6 +37,8 @@ class GameLobby extends Component {
       players: [],
       lobbyButtonState: false,
       player: "",
+      ready: false,
+      gameStatus: true
     };
   }
 
@@ -68,7 +69,19 @@ class GameLobby extends Component {
           players: data.players,
         });
       });
+
+      stompClient.subscribe("/rooms/player-not-ready", (response) => {
+        const data = JSON.parse(response.body);
+        this.setState({
+          players: data.players,
+        });
+      });
+
+      stompClient.subscribe("/rooms/destroy-lobby", (response) => {
+        that.props.history.push("/")
+      })
     });
+
     axios
       .get(`http://localhost:8080/get-lobby/${this.props.match.params.id}`)
       .then((res) => {
@@ -117,6 +130,32 @@ class GameLobby extends Component {
       readyState: "ready",
     });
     stompClient.send("/app/ready", {}, message);
+
+    this.setState({
+      ready: true,
+    });
+  };
+
+  buttonClickNotReady = () => {
+    let message = JSON.stringify({
+      lobbyId: this.props.match.params.id,
+      id: localStorage.getItem("id"),
+      username: localStorage.getItem("username"),
+      readyState: "not ready",
+    });
+    stompClient.send("/app/not-ready", {}, message);
+    this.setState({
+      ready: false,
+    });
+  };
+
+  destroyLobbyButton = () => {
+    let message = JSON.stringify({
+      lobbyId: this.props.match.params.id,
+      gameStatus: true
+    })
+
+    stompClient.send("/app/destroy-lobby", {}, message)
   };
 
   render() {
@@ -133,11 +172,17 @@ class GameLobby extends Component {
                   {this.state.player.gameMaster ? (
                     <div>
                       <Button>Start Game</Button>
-                      <Button>Destroy Lobby</Button>
+                      <Button onClick={this.destroyLobbyButton}>Destroy Lobby</Button>
                     </div>
                   ) : (
                     <div>
-                      <Button onClick={this.buttonClickReady}>Ready</Button>
+                      {this.state.ready ? (
+                        <Button onClick={this.buttonClickNotReady}>
+                          Not Ready
+                        </Button>
+                      ) : (
+                        <Button onClick={this.buttonClickReady}>Ready</Button>
+                      )}
                       <Button onClick={this.leaveLobbyButton}>
                         LeaveLobby
                       </Button>
