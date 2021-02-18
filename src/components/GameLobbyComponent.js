@@ -17,7 +17,7 @@ function GameLobbyComponent(props) {
                 <h1 className="h2">Lobby</h1>
                 {props.gameMaster ? (
                   <div>
-                    <Button>Start Game</Button>
+                    <Button onClick={props.startGameButton}>Start Game</Button>
                     <Button onClick={props.destroyLobbyButton}>
                       Destroy Lobby
                     </Button>

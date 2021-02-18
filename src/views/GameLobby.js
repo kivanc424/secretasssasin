@@ -150,6 +150,25 @@ class GameLobby extends Component {
     });
   };
 
+  startGameButton = () => {
+    if (this.state.players.length >= this.state.lobby.totalPlayers) {
+      console.log("Lobby is full");
+      for (let i = 0; i < this.state.players.length; i++) {
+        const player = this.state.players[i];
+        if (player.readyState === "not ready") {
+          console.log("Player is not ready");
+          break;
+        } else {
+          console.log("All players are ready");
+        }
+
+        //TODO implement start game function with giving out roles to player
+      }
+    } else {
+      console.log("There is not enough players");
+    }
+  };
+
   destroyLobbyButton = () => {
     let message = JSON.stringify({
       lobbyId: this.props.match.params.id,
@@ -165,6 +184,7 @@ class GameLobby extends Component {
         lobbyState={this.state.lobbyButtonState}
         gameMaster={this.state.player.gameMaster}
         destroyLobbyButton={this.destroyLobbyButton}
+        startGameButton={this.startGameButton}
         ready={this.state.ready}
         buttonClickNotReady={this.buttonClickNotReady}
         buttonClickReady={this.buttonClickReady}
