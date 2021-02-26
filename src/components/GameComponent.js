@@ -3,42 +3,140 @@ import styled from "styled-components";
 import AvalonBoard from "../assets/images/avalonboard.jpg";
 import BackgroundVideo from "../assets/videos/backgroundvideo.mp4";
 class GameComponent extends Component {
+  state = {
+    questData: [
+      {
+        quest: "Quest 1",
+        players: 2,
+      },
+      {
+        quest: "Quest 2",
+        players: 3,
+      },
+      {
+        quest: "Quest 3",
+        players: 2,
+      },
+      {
+        quest: "Quest 4",
+        players: 3,
+      },
+      {
+        quest: "Quest 5",
+        players: 3,
+      },
+    ],
+    voteTrackData: [
+      { vote: 1 },
+      { vote: 2 },
+      { vote: 3 },
+      { vote: 4 },
+      { vote: 5 },
+    ],
+  };
   render() {
     return (
-      <Wrapper>
+      <Layout>
         <Container>
-          <Board></Board>
+          <GameContainer>
+            <Board>
+              <MissionsContainer>
+                {this.state.questData.map((data) => {
+                  return (
+                    <Missions>
+                      <h4>{data.quest}</h4>
+                      <h1>{data.players}</h1>
+                    </Missions>
+                  );
+                })}
+              </MissionsContainer>
+              <h1>Vote Track</h1>
+              <VoteTrackContainer>
+                {this.state.voteTrackData.map((data) => {
+                  return (
+                    <VoteTrack>
+                      <h1>{data.vote}</h1>
+                    </VoteTrack>
+                  );
+                })}
+              </VoteTrackContainer>
+            </Board>
+          </GameContainer>
         </Container>
-      </Wrapper>
+      </Layout>
     );
   }
 }
 
 export default GameComponent;
 
-const Wrapper = styled.div`
+const Layout = styled.div`
   width: 100%;
-  height: 1200px;
-  background-image: url(${BackgroundVideo});
+  height: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const Container = styled.div`
-  width: 60%;
-  height: 60%;
+  background-color: green;
+  width: 80%;
+  height: 70%;
+`;
+
+const GameContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MissionsContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const Board = styled.div`
-  width: 70%;
-  height: 80%;
+  background-color: purple;
   border-radius: 50%;
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-image: url(${AvalonBoard});
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+`;
+
+const Missions = styled.div`
+  background-color: red;
+  margin-left: 15px;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 130px;
+`;
+
+const VoteTrackContainer = styled.div`
+  width: 100%;
+  display: flex;
+  margin-top: 10px;
+  margin-left: 50px;
+  align-items: center;
+`;
+
+const VoteTrack = styled.div`
+  background-color: red;
+  margin-left: 15px;
+  width: 80px;
+  border-radius: 50%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
