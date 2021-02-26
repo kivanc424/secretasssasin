@@ -1,7 +1,6 @@
 import { React, Component } from "react";
 import styled from "styled-components";
-import AvalonBoard from "../assets/images/avalonboard.jpg";
-import BackgroundVideo from "../assets/videos/backgroundvideo.mp4";
+import Merlin from "../assets/images/merlin.jpg";
 class GameComponent extends Component {
   state = {
     questData: [
@@ -33,6 +32,7 @@ class GameComponent extends Component {
       { vote: 4 },
       { vote: 5 },
     ],
+    
   };
   render() {
     return (
@@ -61,6 +61,24 @@ class GameComponent extends Component {
                 })}
               </VoteTrackContainer>
             </Board>
+            <PlayersContainer>
+              <Player>
+                <Avatar src={Merlin} />
+                <Name>Kivanc</Name>
+              </Player>
+              <Player>
+                <Avatar src={Merlin} />
+              </Player>
+              <Player>
+                <Avatar src={Merlin} />
+              </Player>
+              <Player>
+                <Avatar src={Merlin} />
+              </Player>
+              <Player>
+                <Avatar src={Merlin} />
+              </Player>
+            </PlayersContainer>
           </GameContainer>
         </Container>
       </Layout>
@@ -74,6 +92,7 @@ const Layout = styled.div`
   width: 100%;
   height: 1000px;
   display: flex;
+  margin-top: 100px;
   justify-content: center;
   align-items: center;
 `;
@@ -81,13 +100,14 @@ const Layout = styled.div`
 const Container = styled.div`
   background-color: green;
   width: 80%;
-  height: 70%;
+  height: 90%;
 `;
 
 const GameContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -139,4 +159,30 @@ const VoteTrack = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PlayersContainer = styled.div`
+  width: 70%;
+  height: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Player = styled.div`
+  background-color: grey;
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Avatar = styled.img`
+  width: 100%;
+  height: 80%;
+`;
+
+const Name = styled.h2`
+  color: white;
 `;
