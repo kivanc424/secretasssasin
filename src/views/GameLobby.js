@@ -78,6 +78,13 @@ class GameLobby extends Component {
         });
       });
 
+      stompClient.subscribe("/rooms/start-game", response => {
+        const data = JSON.parse(response.body)
+        this.setState({
+          players: data.players
+        })
+      })
+
       stompClient.subscribe("/rooms/destroy-lobby", (response) => {
         that.props.history.push("/");
       });
@@ -160,6 +167,12 @@ class GameLobby extends Component {
           break;
         } else {
           console.log("All players are ready");
+
+          let message = JSON.stringify({
+            lobbyId: this.props.match.params.id
+          })
+
+          stompClient.send("/app/start-game", {}, message)
         }
 
         //TODO implement start game function with giving out roles to player
