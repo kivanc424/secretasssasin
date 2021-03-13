@@ -40,9 +40,71 @@ class CreateRoomView extends Component {
             username: localStorage.getItem("username"),
             gameMaster: true,
             readyState: "ready",
-            role: ""
+            role: "",
           },
         ],
+        gameStatus: {
+          quest: [
+            {
+              questText: "Quest 1",
+              questTrack: 1,
+              goodGuysPoint: false,
+              badGuysPoint: false,
+              maxPlayersForQuest: 2
+            },
+            {
+              questText: "Quest 2",
+              questTrack: 2,
+              goodGuysPoint: false,
+              badGuysPoint: false,
+              maxPlayersForQuest: 3
+            },
+            {
+              questText: "Quest 3",
+              questTrack: 3,
+              goodGuysPoint: false,
+              badGuysPoint: false,
+              maxPlayersForQuest: 2
+            },
+            {
+              questText: "Quest 4",
+              questTrack: 4,
+              goodGuysPoint: false,
+              badGuysPoint: false,
+              maxPlayersForQuest: 3
+            },
+            {
+              questText: "Quest 5",
+              questTrack: 5,
+              goodGuysPoint: false,
+              badGuysPoint: false,
+              maxPlayersForQuest: 3
+            },
+          ],
+          vote: [
+            {
+              voteTrack: "1",
+              marker: true,
+            },
+            {
+              voteTrack: "2",
+              marker: false,
+            },
+            {
+              voteTrack: "3",
+              marker: false,
+            },
+            {
+              voteTrack: "4",
+              marker: false,
+            },
+            {
+              voteTrack: "5",
+              marker: false,
+            },
+          ],
+        },
+        gameStartStatus: false,
       })
       .then((res) => {
         that.props.history.push(`/lobby/${res.data.id}`);

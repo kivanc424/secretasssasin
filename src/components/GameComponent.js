@@ -1,89 +1,80 @@
 import { React, Component } from "react";
 import styled from "styled-components";
 import Merlin from "../assets/images/merlin.jpg";
-class GameComponent extends Component {
-  state = {
-    questData: [
-      {
-        quest: "Quest 1",
-        players: 2,
-      },
-      {
-        quest: "Quest 2",
-        players: 3,
-      },
-      {
-        quest: "Quest 3",
-        players: 2,
-      },
-      {
-        quest: "Quest 4",
-        players: 3,
-      },
-      {
-        quest: "Quest 5",
-        players: 3,
-      },
-    ],
-    voteTrackData: [
-      { vote: 1 },
-      { vote: 2 },
-      { vote: 3 },
-      { vote: 4 },
-      { vote: 5 },
-    ],
-    
-  };
-  render() {
-    return (
-      <Layout>
-        <Container>
-          <GameContainer>
-            <Board>
-              <MissionsContainer>
-                {this.state.questData.map((data) => {
+
+function GameComponent(props) {
+  return (
+    <Layout>
+      <Container>
+        <GameContainer>
+          <Board>
+            <MissionsContainer>
+              {props.questData.map((data) => {
+                if (data.goodGuysPoint === true) {
                   return (
-                    <Missions>
-                      <h4>{data.quest}</h4>
-                      <h1>{data.players}</h1>
+                    <Missions style={{ backgroundColor: "blue" }}>
+                      <h4>{data.questText}</h4>
+                      <h1>{data.maxPlayersForQuest}</h1>
                     </Missions>
                   );
-                })}
-              </MissionsContainer>
-              <h1>Vote Track</h1>
-              <VoteTrackContainer>
-                {this.state.voteTrackData.map((data) => {
+                } else if (data.badGuysPoint === true) {
                   return (
-                    <VoteTrack>
-                      <h1>{data.vote}</h1>
+                    <Missions style={{ backgroundColor: "red" }}>
+                      <h4>{data.questText}</h4>
+                      <h1>{data.maxPlayersForQuest}</h1>
+                    </Missions>
+                  );
+                } else {
+                  return (
+                    <Missions style={{ backgroundColor: "white" }}>
+                      <h4>{data.questText}</h4>
+                      <h1>{data.maxPlayersForQuest}</h1>
+                    </Missions>
+                  );
+                }
+              })}
+            </MissionsContainer>
+            <h1>Vote Track</h1>
+            <VoteTrackContainer>
+              {props.voteData.map((data) => {
+                if (data.marker === true) {
+                  return (
+                    <VoteTrack style={{ backgroundColor: "brown" }}>
+                      <h1>{data.voteTrack}</h1>
                     </VoteTrack>
                   );
-                })}
-              </VoteTrackContainer>
-            </Board>
-            <PlayersContainer>
-              <Player>
-                <Avatar src={Merlin} />
-                <Name>Kivanc</Name>
-              </Player>
-              <Player>
-                <Avatar src={Merlin} />
-              </Player>
-              <Player>
-                <Avatar src={Merlin} />
-              </Player>
-              <Player>
-                <Avatar src={Merlin} />
-              </Player>
-              <Player>
-                <Avatar src={Merlin} />
-              </Player>
-            </PlayersContainer>
-          </GameContainer>
-        </Container>
-      </Layout>
-    );
-  }
+                } else {
+                  return (
+                    <VoteTrack style={{ backgroundColor: "white" }}>
+                      <h1>{data.voteTrack}</h1>
+                    </VoteTrack>
+                  );
+                }
+              })}
+            </VoteTrackContainer>
+          </Board>
+          <PlayersContainer>
+            <Player>
+              <Avatar src={Merlin} />
+              <Name>Kivanc</Name>
+            </Player>
+            <Player>
+              <Avatar src={Merlin} />
+            </Player>
+            <Player>
+              <Avatar src={Merlin} />
+            </Player>
+            <Player>
+              <Avatar src={Merlin} />
+            </Player>
+            <Player>
+              <Avatar src={Merlin} />
+            </Player>
+          </PlayersContainer>
+        </GameContainer>
+      </Container>
+    </Layout>
+  );
 }
 
 export default GameComponent;
@@ -92,13 +83,11 @@ const Layout = styled.div`
   width: 100%;
   height: 1000px;
   display: flex;
-  margin-top: 100px;
   justify-content: center;
   align-items: center;
 `;
 
 const Container = styled.div`
-  background-color: green;
   width: 80%;
   height: 90%;
 `;
@@ -131,7 +120,7 @@ const Board = styled.div`
 `;
 
 const Missions = styled.div`
-  background-color: red;
+  background-color: white;
   margin-left: 15px;
   width: 130px;
   display: flex;
@@ -151,7 +140,7 @@ const VoteTrackContainer = styled.div`
 `;
 
 const VoteTrack = styled.div`
-  background-color: red;
+  background-color: white;
   margin-left: 15px;
   width: 80px;
   border-radius: 50%;

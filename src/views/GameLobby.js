@@ -1,6 +1,4 @@
 import { Component, React } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
-import { Button } from "react-bootstrap";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import SockJS from "sockjs-client";
@@ -9,6 +7,7 @@ import Stomp from "stompjs";
 import "../css/lobby.css";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import GameLobbyComponent from "../components/GameLobbyComponent";
+import GameComponent from "../components/GameComponent";
 
 var socket;
 var stompClient;
@@ -78,12 +77,14 @@ class GameLobby extends Component {
         });
       });
 
-      stompClient.subscribe("/rooms/start-game", response => {
-        const data = JSON.parse(response.body)
+      stompClient.subscribe("/rooms/start-game", (response) => {
+        const data = JSON.parse(response.body);
         this.setState({
-          players: data.players
-        })
-      })
+          players: data.players,
+          gameStartStatus: data.gameStartStatus,
+          lobby: data,
+        });
+      });
 
       stompClient.subscribe("/rooms/destroy-lobby", (response) => {
         that.props.history.push("/");
@@ -158,7 +159,12 @@ class GameLobby extends Component {
   };
 
   startGameButton = () => {
-    if (this.state.players.length >= this.state.lobby.totalPlayers) {
+    let message = JSON.stringify({
+      lobbyId: this.props.match.params.id,
+    });
+
+    stompClient.send("/app/start-game", {}, message);
+    /* if (this.state.players.length >= this.state.lobby.totalPlayers) {
       console.log("Lobby is full");
       for (let i = 0; i < this.state.players.length; i++) {
         const player = this.state.players[i];
@@ -169,10 +175,10 @@ class GameLobby extends Component {
           console.log("All players are ready");
 
           let message = JSON.stringify({
-            lobbyId: this.props.match.params.id
-          })
+            lobbyId: this.props.match.params.id,
+          });
 
-          stompClient.send("/app/start-game", {}, message)
+          stompClient.send("/app/start-game", {}, message);
         }
 
         //TODO implement start game function with giving out roles to player
@@ -180,6 +186,7 @@ class GameLobby extends Component {
     } else {
       console.log("There is not enough players");
     }
+    */
   };
 
   destroyLobbyButton = () => {
@@ -192,19 +199,37 @@ class GameLobby extends Component {
   };
 
   render() {
+    const renderGame = () => {
+      if (this.state.lobby) {
+        return (
+          <GameComponent
+            questData={this.state.lobby.gameStatus.quest}
+            voteData={this.state.lobby.gameStatus.vote}
+          />
+        );
+      } else {
+        return <h1>loading</h1>;
+      }
+    };
     return (
-      <GameLobbyComponent
-        lobbyState={this.state.lobbyButtonState}
-        gameMaster={this.state.player.gameMaster}
-        destroyLobbyButton={this.destroyLobbyButton}
-        startGameButton={this.startGameButton}
-        ready={this.state.ready}
-        buttonClickNotReady={this.buttonClickNotReady}
-        buttonClickReady={this.buttonClickReady}
-        leaveLobbyButton={this.leaveLobbyButton}
-        playersData={this.state.players}
-        columnData={this.state.columns}
-      />
+      <div>
+        {this.state.lobby.gameStartStatus === false ? (
+          <GameLobbyComponent
+            lobbyState={this.state.lobbyButtonState}
+            gameMaster={this.state.player.gameMaster}
+            destroyLobbyButton={this.destroyLobbyButton}
+            startGameButton={this.startGameButton}
+            ready={this.state.ready}
+            buttonClickNotReady={this.buttonClickNotReady}
+            buttonClickReady={this.buttonClickReady}
+            leaveLobbyButton={this.leaveLobbyButton}
+            playersData={this.state.players}
+            columnData={this.state.columns}
+          />
+        ) : (
+          renderGame()
+        )}
+      </div>
     );
   }
 }
